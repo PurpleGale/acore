@@ -1,0 +1,136 @@
+# Don't touch this manually
+version: 0
+
+# Select language from "languages" folder, you can add your by creating new file
+language: en-US
+
+# qol feature which increase minecart speed and add minecart damage
+betterMinecarts:
+  enabled: true
+  # Which minecart types should apply these features
+  minecart-types: [MINECART]
+  # Amount * current minecart speed (0.2 is 1)
+  damage-amount: 1
+  # Minimum minecart speed
+  speed-threshold: 0.4
+  # These values are multipliers for block-types
+  rail-types:
+    RAIL: 1.0
+    POWERED_RAIL: 1.2
+  # Increase max minecart speed while this type of block under minecart by {value * rail_types}
+  block-types:
+    COPPER_BLOCK: 2.0 # 2.0 for RAIL and 2.4 for POWERED_RAIL by default
+    CUT_COPPER: 2.0
+    WAXED_COPPER_BLOCK: 1.9
+    WAXED_CUT_COPPER: 1.9
+    GOLD_BLOCK: 1.75
+    EXPOSED_COPPER: 1.75
+    EXPOSED_CUT_COPPER: 1.75
+    WAXED_EXPOSED_COPPER: 1.65
+    WAXED_EXPOSED_CUT_COPPER: 1.65
+    WEATHERED_COPPER: 1.5
+    WEATHERED_CUT_COPPER: 1.5
+    WAXED_WEATHERED_COPPER: 1.4
+    WAXED_WEATHERED_CUT_COPPER: 1.4
+    OXIDIZED_COPPER: 1.25
+    OXIDIZED_CUT_COPPER: 1.25
+    WAXED_OXIDIZED_COPPER: 1.15
+    WAXED_OXIDIZED_CUT_COPPER: 1.15
+    DIRT: 0.35
+    GRAVEL: 0.3
+    SOUL_SAND: 0.2
+# Speed up / Slow down player speed, triggered on Sprint event and then checks every {tick-frequency} ticks
+betterRun:
+  enabled: true
+  # Amount of ticks to wait before next check of player staying on right block
+  tick-frequency: 10
+  block-types:
+    DIRT_PATH: 0.025 # 0.2 default player speed + 0.025 = 112.5% from original speed
+# Convert blocks to another type if lightning hits it (in 1.5 radius which looks like +)
+lightningConversion:
+  enabled: true
+  block-types:
+    SAND: GLASS
+    RED_SAND: RED_STAINED_GLASS
+# Drop some item on block fired event
+fireAdjustment:
+  enabled: true
+  # This is bushfire limiter, so if some place was ignited it doesn't burn so fast
+  fire-limit: 20
+  horizontal-search-radius: 10
+  vertical-search-radius: 5
+  # Type of blocks which should drop some item on BlockBurnEvent
+  block-drops:
+    # Name of category doesn't matter, made for better readability
+    WOOD:
+      blocks: [ACACIA_LOG, BIRCH_LOG, CHERRY_LOG, DARK_OAK_LOG, JUNGLE_LOG, OAK_LOG, SPRUCE_LOG, STRIPPED_ACACIA_LOG, STRIPPED_BIRCH_LOG, STRIPPED_CHERRY_LOG, STRIPPED_DARK_OAK_LOG, STRIPPED_JUNGLE_LOG, STRIPPED_MANGROVE_LOG, STRIPPED_OAK_LOG, STRIPPED_SPRUCE_LOG]
+      item: CHARCOAL
+      min-amount: 1
+      max-amount: 3
+      chance: 0.5
+    PLANKS:
+      blocks: [ACACIA_PLANKS, BAMBOO_PLANKS, BIRCH_PLANKS, CHERRY_PLANKS, DARK_OAK_PLANKS, JUNGLE_PLANKS, OAK_PLANKS, SPRUCE_PLANKS, MANGROVE_PLANKS]
+      item: CHARCOAL
+      min-amount: 1
+      max-amount: 1
+      chance: 0.2
+    BUTTONS:
+      blocks: [ACACIA_BUTTON, BAMBOO_BUTTON, BIRCH_BUTTON, CHERRY_BUTTON, DARK_OAK_BUTTON, JUNGLE_BUTTON, OAK_BUTTON, SPRUCE_BUTTON]
+      item: CHARCOAL
+      min-amount: 1
+      max-amount: 1
+      chance: 0.25
+    DOORS:
+      blocks: [ACACIA_DOOR, BAMBOO_DOOR, BIRCH_DOOR, CHERRY_DOOR, DARK_OAK_DOOR, JUNGLE_DOOR, OAK_DOOR, SPRUCE_DOOR]
+      item: CHARCOAL
+      min-amount: 1
+      max-amount: 2
+      chance: 0.2
+    FENCE:
+      blocks: [ACACIA_FENCE, BAMBOO_FENCE, BIRCH_FENCE, CHERRY_FENCE, DARK_OAK_FENCE, JUNGLE_FENCE, OAK_FENCE, SPRUCE_FENCE]
+      item: CHARCOAL
+      min-amount: 1
+      max-amount: 2
+      chance: 0.4
+    FENCE_GATE:
+      blocks: [ACACIA_FENCE_GATE, BAMBOO_FENCE_GATE, BIRCH_FENCE_GATE, CHERRY_FENCE_GATE, DARK_OAK_FENCE_GATE, JUNGLE_FENCE_GATE, OAK_FENCE_GATE, SPRUCE_FENCE_GATE]
+      item: CHARCOAL
+      min-amount: 1
+      max-amount: 2
+      chance: 0.4
+    SIGNS:
+      blocks: [ACACIA_SIGN, BAMBOO_SIGN, BIRCH_SIGN, CHERRY_SIGN, DARK_OAK_SIGN, JUNGLE_SIGN, OAK_SIGN, SPRUCE_SIGN, ACACIA_WALL_SIGN, BAMBOO_WALL_SIGN, BIRCH_WALL_SIGN, CHERRY_WALL_SIGN, DARK_OAK_WALL_SIGN, JUNGLE_WALL_SIGN, OAK_WALL_SIGN, SPRUCE_WALL_SIGN]
+      item: CHARCOAL
+      min-amount: 1
+      max-amount: 1
+      chance: 0.3
+    HANGING_SIGNS:
+      blocks: [ACACIA_HANGING_SIGN, BAMBOO_HANGING_SIGN, BIRCH_HANGING_SIGN, CHERRY_HANGING_SIGN, DARK_OAK_HANGING_SIGN, JUNGLE_HANGING_SIGN, OAK_HANGING_SIGN, SPRUCE_HANGING_SIGN]
+      item: CHARCOAL
+      min-amount: 1
+      max-amount: 1
+      chance: 0.3
+    SLABS:
+      blocks: [ACACIA_SLAB, BAMBOO_SLAB, BIRCH_SLAB, CHERRY_SLAB, DARK_OAK_SLAB, JUNGLE_SLAB, OAK_SLAB, SPRUCE_SLAB]
+      item: CHARCOAL
+      min-amount: 1
+      max-amount: 1
+      chance: 0.25
+    STAIRS:
+      blocks: [ACACIA_STAIRS, BAMBOO_STAIRS, BIRCH_STAIRS, CHERRY_STAIRS, DARK_OAK_STAIRS, JUNGLE_STAIRS, OAK_STAIRS, SPRUCE_STAIRS]
+      item: CHARCOAL
+      min-amount: 1
+      max-amount: 1
+      chance: 0.35
+    TRAPDOORS:
+      blocks: [ACACIA_TRAPDOOR, BAMBOO_TRAPDOOR, BIRCH_TRAPDOOR, CHERRY_TRAPDOOR, DARK_OAK_TRAPDOOR, JUNGLE_TRAPDOOR, OAK_TRAPDOOR, SPRUCE_TRAPDOOR]
+      item: CHARCOAL
+      min-amount: 1
+      max-amount: 1
+      chance: 0.4
+    LEAVES:
+      blocks: [ACACIA_LEAVES, BIRCH_LEAVES, CHERRY_LEAVES, DARK_OAK_LEAVES, JUNGLE_LEAVES, OAK_LEAVES, SPRUCE_LEAVES, MANGROVE_LEAVES]
+      item: STICK
+      min-amount: 1
+      max-amount: 3
+      chance: 0.1
