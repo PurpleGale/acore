@@ -1,22 +1,25 @@
-package your.package.name.config
+package org.antagon.acore.config
 
 import org.bukkit.configuration.file.FileConfiguration
-import your.package.name.YourPlugin
+import org.antagon.acore.Acore
 
 object ConfigManager {
-    private lateinit var plugin: YourPlugin
+    var plugin: Acore? = null
+        private set
     lateinit var config: FileConfiguration
 
     // Классы по обработке частей настроек
     lateinit var fireConfig: FireConfig
+    lateinit var languageManager: LanguageManager
 
-    fun init(pluginInstance: YourPlugin) {
+    fun init(pluginInstance: Acore) {
         plugin = pluginInstance
         config = plugin.config
         plugin.saveDefaultConfig()
 
         // Инициализируем подмодули конфигурации
         fireConfig = FireConfig(config)
+        languageManager = LanguageManager(config)
     }
 
     fun reload() {

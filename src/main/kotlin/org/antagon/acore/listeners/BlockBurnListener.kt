@@ -1,23 +1,23 @@
-package your.package.name.listeners
+package org.antagon.acore.listeners
 
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBurnEvent
 import org.bukkit.inventory.ItemStack
-import your.package.name.config.ConfigManager
+import org.antagon.acore.config.ConfigManager
 import kotlin.random.Random
 
-class BlockBurnDropListener : Listener {
+class BlockBurnListener : Listener {
 
     @EventHandler
     fun onBlockBurn(event: BlockBurnEvent) {
-        val fireConfig = ConfigManager.fireConfig
-        if (!fireConfig.isEnabled) return
+        if (!ConfigManager.fireConfig.isEnabled) return
+        
+        val burnedBlock = event.block
+        val burnedBlockType = burnedBlock.type
 
-        val burnedBlock = event.block.type
-
-        for (dropConfig in fireConfig.blockDrops) {
-            if (burnedBlock in dropConfig.blocks) {
+        for (dropConfig in ConfigManager.fireConfig.blockDrops) {
+            if (burnedBlockType in dropConfig.blocks) {
                 if (Random.nextDouble() > dropConfig.chance) return
 
                 val amount = (dropConfig.minAmount..dropConfig.maxAmount).random()

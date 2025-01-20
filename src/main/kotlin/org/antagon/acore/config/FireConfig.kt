@@ -1,4 +1,4 @@
-package your.package.name.config
+package org.antagon.acore.config
 
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.Material
