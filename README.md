@@ -4,7 +4,7 @@
     <a href="https://github.com/PurpleGale/acore/pulse" alt="Activity">
         <img src="https://img.shields.io/github/commit-activity/m/Aquobus/AntagonCore?style=flat-square" /></a>
     <a href="https://discord.antagon.su">
-        <img src="https://img.shields.io/discord/946499645020979210?style=flat-square&logo=discord&logoColor=white"
+        <img src="https://img.shields.io/discord/1285588070497910896?style=flat-square&logo=discord&logoColor=white"
             alt="Chat on Discord"></a>
 </p>
 
