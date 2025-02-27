@@ -1,0 +1,13 @@
+name: acore
+version: '0.0.1'
+main: org.antagon.acore.Acore
+api-version: '1.21'
+load: STARTUP
+authors: [ aqua, bloodysupport ]
+description: Multi-purpose plugin for Antagon:Reborn server
+website: https://reborn.antagon.su
+permissions :
+  permission.admin:
+    description: "Permission for admin commands"
+    default: op
+softdepend: [ConditionalEvents, MythicMobs]
