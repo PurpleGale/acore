@@ -2,7 +2,7 @@ package org.antagon.acore.listeners;
 
 import org.antagon.acore.core.ConfigManager;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
+//import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,7 +35,7 @@ public class MinecartSpeedController implements Listener {
     public void onVehicleMove(VehicleMoveEvent event) {
         if (!betterMinecartsEnabled || !(event.getVehicle() instanceof Minecart minecart)) return;
 
-        Entity passenger = minecart.getPassengers().getFirst();
+        //Entity passenger = minecart.getPassengers().getFirst();
 
         Material belowBlock = minecart.getLocation().add(0, -1, 0).getBlock().getType();
         double multiplier = blockSpeedMultipliers.getOrDefault(belowBlock, 1.0);
