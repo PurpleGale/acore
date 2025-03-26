@@ -1,4 +1,4 @@
-package org.antagon.acore.localization;
+package org.antagon.acore.core;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
