@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.antagon.acore.core.ConfigManager;
-import org.antagon.acore.utils.MaterialValidator;
+import org.antagon.acore.util.MaterialValidator;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -55,14 +55,7 @@ public class LightningConversionListener implements Listener {
                 Material surroundingBlockMaterial = surroundingBlock.getType();
                 if (validBlocks.get(surroundingBlockMaterial) != null) {
 
-<<<<<<< HEAD:src/main/java/org/antagon/acore/listeners/LightningConversionListener.java
                     surroundingBlock.setType(validBlocks.get(surroundingBlockMaterial));
-=======
-                    String newMaterial = blockTypes.getString(surroundingBlockType);
-                    Material material = Material.matchMaterial(newMaterial);
-
-                    if (material != null) surroundingBlock.setType(material);
->>>>>>> 53ba489748348e49870d1547f8dc2dca6ab24c0b:src/main/java/org/antagon/acore/listener/LightningConversionListener.java
 
                 }
 

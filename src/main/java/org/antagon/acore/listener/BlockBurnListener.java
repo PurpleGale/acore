@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.Set;
 
 import org.antagon.acore.core.ConfigManager;
-import org.antagon.acore.utils.MaterialValidator;
+import org.antagon.acore.util.MaterialValidator;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
