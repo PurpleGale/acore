@@ -16,26 +16,26 @@ public class MaterialValidator {
     }
 
     public static Set<Material> validateMaterials(List<String> checkList) {
-        Set<Material> validBlocks = new HashSet<>();
+        Set<Material> validMaterials = new HashSet<>();
 
         for (String materialName : checkList) {
             Material material = Material.matchMaterial(materialName);
 
-            if (material != null) validBlocks.add(material);
+            if (material != null) validMaterials.add(material);
         }
 
-        return validBlocks;
+        return validMaterials;
     }
 
     public static Set<Material> validateMaterials(Set<String> checkList) {
-        Set<Material> validBlocks = new HashSet<>();
+        Set<Material> validMaterials = new HashSet<>();
 
         for (String materialName : checkList) {
             Material material = Material.matchMaterial(materialName);
 
-            if (material != null) validBlocks.add(material);
+            if (material != null) validMaterials.add(material);
         }
 
-        return validBlocks;
+        return validMaterials;
     }
 }
