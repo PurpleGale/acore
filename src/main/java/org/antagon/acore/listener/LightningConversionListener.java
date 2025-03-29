@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.antagon.acore.core.ConfigManager;
-import org.antagon.acore.utils.MaterialValidator;
+import org.antagon.acore.util.MaterialValidator;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

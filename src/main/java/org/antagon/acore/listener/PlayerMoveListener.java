@@ -5,10 +5,12 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.antagon.acore.core.ConfigManager;
-import org.antagon.acore.utils.MaterialValidator;
+
+import org.antagon.acore.util.MaterialValidator;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;

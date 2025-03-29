@@ -1,7 +1,7 @@
 package org.antagon.acore.listener;
 
 import org.antagon.acore.core.ConfigManager;
-import org.antagon.acore.utils.MaterialValidator;
+import org.antagon.acore.util.MaterialValidator;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -38,14 +38,6 @@ public class MinecartSpeedListener implements Listener {
                 continue;
             }
         }
-
-        // this.blockSpeedMultipliers = new HashMap<>();
-        // for (String key : config.getStringList("block-types")) {
-        //     String[] parts = key.split(":");
-        //     Material material = Material.valueOf(parts[0]);
-        //     double multiplier = Double.parseDouble(parts[1]);
-        //     this.blockSpeedMultipliers.put(material, multiplier);
-        // }
     }
 
     @EventHandler
