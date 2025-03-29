@@ -54,15 +54,8 @@ public class LightningConversionListener implements Listener {
                 Block surroundingBlock = event.getLightning().getWorld().getBlockAt(x + dx, y-1, z + dz);
                 Material surroundingBlockMaterial = surroundingBlock.getType();
                 if (validBlocks.get(surroundingBlockMaterial) != null) {
-
-<<<<<<< HEAD:src/main/java/org/antagon/acore/listeners/LightningConversionListener.java
+                    
                     surroundingBlock.setType(validBlocks.get(surroundingBlockMaterial));
-=======
-                    String newMaterial = blockTypes.getString(surroundingBlockType);
-                    Material material = Material.matchMaterial(newMaterial);
-
-                    if (material != null) surroundingBlock.setType(material);
->>>>>>> 53ba489748348e49870d1547f8dc2dca6ab24c0b:src/main/java/org/antagon/acore/listener/LightningConversionListener.java
 
                 }
 

@@ -2,15 +2,13 @@ package org.antagon.acore.listener;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import org.antagon.acore.core.ConfigManager;
-<<<<<<< HEAD:src/main/java/org/antagon/acore/listeners/PlayerMoveListener.java
 import org.antagon.acore.utils.MaterialValidator;
 import org.bukkit.Material;
-=======
->>>>>>> 53ba489748348e49870d1547f8dc2dca6ab24c0b:src/main/java/org/antagon/acore/listener/PlayerMoveListener.java
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -23,7 +21,8 @@ public class PlayerMoveListener implements Listener {
     private final boolean betterRunEnabled;
     private final ConfigurationSection blockTypes;
     private final int checkFrequency;
-    private final Set<Material> validBlocks;
+    private final double movementThreshold;
+    private final Map<Material, Double> validBlocks = new HashMap<>();
     private final Map<UUID, Long> lastCheckTime = new HashMap<>();
 
     public PlayerMoveListener() {
@@ -31,12 +30,24 @@ public class PlayerMoveListener implements Listener {
 
         this.betterRunEnabled = config.getBoolean("betterRun.enabled");
         this.blockTypes = config.getSection("betterRun.block-types");
-        this.checkFrequency = config.getInt("betterRun.tick-frequency");
+        this.checkFrequency = config.getInt("betterRun.tick-frequency", 20);
+        this.movementThreshold = config.getDouble("betterRun.move-threshold", 0.01);
 
-        this.validBlocks = MaterialValidator.validateMaterials(blockTypes.getKeys(false));
+        // this.validBlocks = MaterialValidator.validateMaterials(blockTypes.getKeys(false));
+
+        for (String key : blockTypes.getKeys(false)) {
+            try {
+                Material blockType = MaterialValidator.validateMaterial(key);
+                double speedMultiplier = blockTypes.getDouble(key);
+
+                validBlocks.put(blockType, speedMultiplier);
+            } catch (IllegalArgumentException e) {
+                continue;
+            }
+        }
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerMove(PlayerMoveEvent event) {
 
         if (!betterRunEnabled) return;
@@ -47,10 +58,17 @@ public class PlayerMoveListener implements Listener {
         long currentTime = System.currentTimeMillis();
         long lastCheck = lastCheckTime.getOrDefault(playerId, 0L);
 
-        if (currentTime - lastCheck < checkFrequency) {
-            return; // Too quick check
-        }
+        if (currentTime - lastCheck < checkFrequency) return;
+
+        if (event.getFrom().distanceSquared(event.getTo()) < movementThreshold) return;
 
         Block blockUnder = player.getLocation().getBlock().getRelative(0, -1, 0);
+        Material blockUnderType = blockUnder.getType();
+
+        if (validBlocks.containsKey(blockUnderType)) {
+            AttributeInstance speedAttribute = player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
+
+            speedAttribute.setBaseValue(validBlocks.get(blockUnderType) + 0.2);
+        }
     }
 }

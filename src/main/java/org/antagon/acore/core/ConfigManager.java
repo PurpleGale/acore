@@ -97,6 +97,14 @@ public class ConfigManager implements IConfig {
         return config.getBoolean(path, defaultValue);
     }
 
+    public double getDouble(String path) {
+        return config.getDouble(path);
+    }
+
+    public double getDouble(String path, Double defaultValue) {
+        return config.getDouble(path, defaultValue);
+    }
+
     public List<String> getStringList(String path) {
         return config.getStringList(path);
     }
