@@ -1,4 +1,4 @@
-package org.antagon.acore.listeners;
+package org.antagon.acore.listener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,13 +14,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-public class PlayerMoveController implements Listener {
+public class PlayerMoveListener implements Listener {
     private final boolean betterRunEnabled;
     private final ConfigurationSection blockTypes;
     private final int checkFrequency;
     private final Map<UUID, Long> lastCheckTime = new HashMap<>();
 
-    public PlayerMoveController() {
+    public PlayerMoveListener() {
         ConfigManager config = ConfigManager.getInstance();
 
         this.betterRunEnabled = config.getBoolean("betterRun.enabled");

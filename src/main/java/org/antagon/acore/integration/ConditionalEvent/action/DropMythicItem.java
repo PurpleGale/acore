@@ -1,4 +1,4 @@
-package org.antagon.acore.integrations.ConditionalEvents.actions;
+package org.antagon.acore.integration.ConditionalEvent.action;
 
 import ce.ajneb97.api.ConditionalEventsAction;
 import io.lumine.mythic.bukkit.MythicBukkit;

@@ -1,4 +1,4 @@
-package org.antagon.acore.listeners;
+package org.antagon.acore.listener;
 
 import org.antagon.acore.core.ConfigManager;
 import org.bukkit.Location;
@@ -10,11 +10,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.weather.LightningStrikeEvent;
 
-public class LightningConversionController implements Listener {
+public class LightningConversionListener implements Listener {
     private final boolean lightningConversionEnabled;
     private final ConfigurationSection blockTypes;
 
-    public LightningConversionController() {
+    public LightningConversionListener() {
         ConfigManager config = ConfigManager.getInstance();
 
         this.lightningConversionEnabled = config.getBoolean("lightningConversion.enabled", true);
@@ -40,7 +40,7 @@ public class LightningConversionController implements Listener {
                 if (blockTypes.getKeys(false).contains(surroundingBlockType)) {
 
                     String newMaterial = blockTypes.getString(surroundingBlockType);
-                    Material material = Material.matchMaterial(newMaterial)
+                    Material material = Material.matchMaterial(newMaterial);
 
                     if (material != null) surroundingBlock.setType(material);
 

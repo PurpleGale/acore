@@ -1,7 +1,7 @@
 package org.antagon.acore.core;
 
+import org.antagon.acore.api.IConfig;
 import org.antagon.acore.config.ConfigFileCreator;
-import org.antagon.acore.config.IConfig;
 import org.antagon.acore.config.ConfigUpdater;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;

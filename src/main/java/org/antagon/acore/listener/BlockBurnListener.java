@@ -1,4 +1,4 @@
-package org.antagon.acore.listeners;
+package org.antagon.acore.listener;
 
 import java.util.EnumMap;
 import java.util.HashSet;
@@ -15,13 +15,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class BlockBurnController implements Listener {
+public class BlockBurnListener implements Listener {
     private final boolean fireAdjustmentEnabled;
     private final HashSet<Material> validBlocks = new HashSet<>();
     private final Map<Material, BlockDropConfig> blockDropConfigs = new EnumMap<>(Material.class);
     private final Random generator = new Random();
 
-    public BlockBurnController() {
+    public BlockBurnListener() {
         ConfigManager config = ConfigManager.getInstance();
         this.fireAdjustmentEnabled = config.getBoolean("fireAdjustment.enabled", true);
         
