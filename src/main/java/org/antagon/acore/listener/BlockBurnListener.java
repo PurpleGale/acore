@@ -1,4 +1,4 @@
-package org.antagon.acore.listeners;
+package org.antagon.acore.listener;
 
 import java.util.EnumMap;
 import java.util.HashSet;

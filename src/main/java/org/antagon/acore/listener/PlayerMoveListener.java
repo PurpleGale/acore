@@ -1,4 +1,4 @@
-package org.antagon.acore.listeners;
+package org.antagon.acore.listener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,8 +6,11 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.antagon.acore.core.ConfigManager;
+<<<<<<< HEAD:src/main/java/org/antagon/acore/listeners/PlayerMoveListener.java
 import org.antagon.acore.utils.MaterialValidator;
 import org.bukkit.Material;
+=======
+>>>>>>> 53ba489748348e49870d1547f8dc2dca6ab24c0b:src/main/java/org/antagon/acore/listener/PlayerMoveListener.java
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
