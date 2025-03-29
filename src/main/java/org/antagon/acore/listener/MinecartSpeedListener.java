@@ -1,4 +1,4 @@
-package org.antagon.acore.listeners;
+package org.antagon.acore.listener;
 
 import org.antagon.acore.core.ConfigManager;
 import org.bukkit.Material;
@@ -12,12 +12,12 @@ import org.bukkit.util.Vector;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MinecartSpeedController implements Listener {
+public class MinecartSpeedListener implements Listener {
 
     private final boolean betterMinecartsEnabled;
     private final Map<Material, Double> blockSpeedMultipliers;
 
-    public MinecartSpeedController() {
+    public MinecartSpeedListener() {
         ConfigManager config = ConfigManager.getInstance();
 
         this.betterMinecartsEnabled = config.getBoolean("betterMinecarts.enabled", true);

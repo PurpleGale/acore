@@ -1,4 +1,4 @@
-package org.antagon.acore.config;
+package org.antagon.acore.api;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
