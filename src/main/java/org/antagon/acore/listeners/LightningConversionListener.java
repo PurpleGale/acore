@@ -1,6 +1,10 @@
 package org.antagon.acore.listeners;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.antagon.acore.core.ConfigManager;
+import org.antagon.acore.utils.MaterialValidator;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,15 +14,27 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.weather.LightningStrikeEvent;
 
-public class LightningConversionController implements Listener {
+public class LightningConversionListener implements Listener {
     private final boolean lightningConversionEnabled;
     private final ConfigurationSection blockTypes;
+    private Map<Material, Material> validBlocks = new HashMap<>();
 
-    public LightningConversionController() {
+    public LightningConversionListener() {
         ConfigManager config = ConfigManager.getInstance();
 
         this.lightningConversionEnabled = config.getBoolean("lightningConversion.enabled", true);
         this.blockTypes = config.getSection("lightningConversion.block-types");
+
+        for (String key : blockTypes.getKeys(false)) {
+            try {
+                Material fromBlock = MaterialValidator.validateMaterial(key);
+                Material toBlock = MaterialValidator.validateMaterial(blockTypes.getString(key));
+
+                validBlocks.put(fromBlock, toBlock);
+            } catch (IllegalArgumentException e) {
+                continue;
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -36,13 +52,10 @@ public class LightningConversionController implements Listener {
             for (int dz = -1; dz <= 1; dz++) {
 
                 Block surroundingBlock = event.getLightning().getWorld().getBlockAt(x + dx, y-1, z + dz);
-                String surroundingBlockType = surroundingBlock.getType().toString();
-                if (blockTypes.getKeys(false).contains(surroundingBlockType)) {
+                Material surroundingBlockMaterial = surroundingBlock.getType();
+                if (validBlocks.get(surroundingBlockMaterial) != null) {
 
-                    String newMaterial = blockTypes.getString(surroundingBlockType);
-                    Material material = Material.matchMaterial(newMaterial)
-
-                    if (material != null) surroundingBlock.setType(material);
+                    surroundingBlock.setType(validBlocks.get(surroundingBlockMaterial));
 
                 }
 
