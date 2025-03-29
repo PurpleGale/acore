@@ -1,4 +1,4 @@
-package org.antagon.acore.utils;
+package org.antagon.acore.util;
 
 import java.util.HashSet;
 import java.util.List;
