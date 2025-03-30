@@ -2,6 +2,7 @@ package org.antagon.acore.listener;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.antagon.acore.core.ConfigManager;
 import org.antagon.acore.util.MaterialValidator;
@@ -15,15 +16,21 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.weather.LightningStrikeEvent;
 
 public class LightningConversionListener implements Listener {
+    private final Logger logger = Logger.getLogger(LightningConversionListener.class.getName());
     private final boolean lightningConversionEnabled;
     private final ConfigurationSection blockTypes;
-    private Map<Material, Material> validBlocks = new HashMap<>();
+    private final Map<Material, Material> validBlocks = new HashMap<>();
 
     public LightningConversionListener() {
         ConfigManager config = ConfigManager.getInstance();
 
         this.lightningConversionEnabled = config.getBoolean("lightningConversion.enabled", true);
         this.blockTypes = config.getSection("lightningConversion.block-types");
+
+        if (blockTypes == null) {
+            logger.warning("Warning: configuration section ‘lightningConversion.block-types’ not found!");
+            return;
+        }
 
         for (String key : blockTypes.getKeys(false)) {
             try {
@@ -32,6 +39,7 @@ public class LightningConversionListener implements Listener {
 
                 validBlocks.put(fromBlock, toBlock);
             } catch (IllegalArgumentException e) {
+                logger.warning("Error when registering material for conversion: " + key + " -> " + blockTypes.getString(key) + ": " + e.getMessage());
                 continue;
             }
         }
