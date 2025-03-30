@@ -51,6 +51,7 @@ public class PlayerMoveListener implements Listener {
 
                 validBlocks.put(blockType, speedMultiplier);
             } catch (IllegalArgumentException e) {
+                logger.warning("Invalid material in configuration: " + key + ". " + e.getMessage());
                 continue;
             }
         }

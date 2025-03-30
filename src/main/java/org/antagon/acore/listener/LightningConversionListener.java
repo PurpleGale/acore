@@ -39,7 +39,7 @@ public class LightningConversionListener implements Listener {
 
                 validBlocks.put(fromBlock, toBlock);
             } catch (IllegalArgumentException e) {
-                logger.warning("Error when registering material for conversion: " + key + " -> " + blockTypes.getString(key) + ": " + e.getMessage());
+                logger.warning("Invalid material in configuration: " + key + ". " + e.getMessage());
                 continue;
             }
         }
