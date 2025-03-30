@@ -3,6 +3,7 @@ package org.antagon.acore.listener;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import org.antagon.acore.core.ConfigManager;
 
@@ -20,6 +21,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 public class PlayerMoveListener implements Listener {
+    private final Logger logger = Logger.getLogger(PlayerMoveListener.class.getName());
     private final boolean betterRunEnabled;
     private final ConfigurationSection blockTypes;
     private final int checkFrequency;
@@ -36,6 +38,11 @@ public class PlayerMoveListener implements Listener {
         this.movementThreshold = config.getDouble("betterRun.move-threshold", 0.01);
 
         // this.validBlocks = MaterialValidator.validateMaterials(blockTypes.getKeys(false));
+
+        if (blockTypes == null) {
+            logger.warning("Warning: configuration section ‘betterRun.block-types’ not found!");
+            return;
+        }
 
         for (String key : blockTypes.getKeys(false)) {
             try {

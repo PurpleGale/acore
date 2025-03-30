@@ -31,6 +31,11 @@ public class MinecartSpeedListener implements Listener {
         this.betterMinecartsEnabled = config.getBoolean("betterMinecarts.enabled", true);
         this.blockTypes = config.getSection("betterMinecarts.block-types");
 
+        if (blockTypes == null) {
+            logger.warning("Warning: configuration section ‘betterMinecarts.block-types’ not found!");
+            return;
+        }
+
         for (String key : blockTypes.getKeys(false)) {
             try {
                 Material blockType = MaterialValidator.validateMaterial(key);
