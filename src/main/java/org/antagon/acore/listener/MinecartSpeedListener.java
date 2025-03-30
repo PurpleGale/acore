@@ -2,6 +2,7 @@ package org.antagon.acore.listener;
 
 import org.antagon.acore.core.ConfigManager;
 import org.antagon.acore.util.MaterialValidator;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -14,13 +15,15 @@ import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class MinecartSpeedListener implements Listener {
 
+    private final Logger logger = Logger.getLogger(MinecartSpeedListener.class.getName());
     private final boolean betterMinecartsEnabled;
 
     private final ConfigurationSection blockTypes;
-    private Map<Material, Double> validBlocks = new HashMap<>();
+    private final Map<Material, Double> validBlocks = new HashMap<>();
 
     public MinecartSpeedListener() {
         ConfigManager config = ConfigManager.getInstance();
@@ -35,6 +38,7 @@ public class MinecartSpeedListener implements Listener {
 
                 validBlocks.put(blockType, blockSpeedMultiplier);
             } catch (IllegalArgumentException e) {
+                logger.warning("Invalid material in configuration: " + key + ". " + e.getMessage());
                 continue;
             }
         }
@@ -46,11 +50,14 @@ public class MinecartSpeedListener implements Listener {
 
         //Entity passenger = minecart.getPassengers().getFirst();
 
-        Material belowBlock = minecart.getLocation().add(0, -1, 0).getBlock().getType();
+        Location loc = minecart.getLocation();
+        Material belowBlock = loc.getWorld().getBlockAt(loc.getBlockX(), loc.getBlockY() - 1, loc.getBlockZ()).getType();
         double multiplier = validBlocks.getOrDefault(belowBlock, 1.0);
 
-        Vector velocity = minecart.getVelocity();
-        Vector newVelocity = velocity.multiply(multiplier);
-        minecart.setVelocity(newVelocity);
+        if (Math.abs(multiplier - 1.0) > 0.001) {
+            Vector velocity = minecart.getVelocity();
+            Vector newVelocity = velocity.multiply(multiplier);
+            minecart.setVelocity(newVelocity);
+        }
     }
 }
