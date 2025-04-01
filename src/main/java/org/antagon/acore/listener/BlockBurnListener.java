@@ -4,8 +4,10 @@ import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import org.antagon.acore.core.ConfigManager;
+import org.antagon.acore.util.MaterialValidator;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
@@ -17,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class BlockBurnListener implements Listener {
     private final boolean fireAdjustmentEnabled;
-    private final HashSet<Material> validBlocks = new HashSet<>();
+    private final Set<Material> validBlocks = new HashSet<>();
     private final Map<Material, BlockDropConfig> blockDropConfigs = new EnumMap<>(Material.class);
     private final Random generator = new Random();
 
@@ -40,11 +42,14 @@ public class BlockBurnListener implements Listener {
             );
             
             for (String blockName : section.getStringList("blocks")) {
-                Material material = Material.matchMaterial(blockName);
-                if (material == null) continue;
-                
-                validBlocks.add(material);
-                blockDropConfigs.put(material, dropConfig);
+                try {
+                    Material material = MaterialValidator.validateMaterial(blockName);
+
+                    validBlocks.add(material);
+                    blockDropConfigs.put(material, dropConfig);
+                } catch (IllegalArgumentException e) {
+                    continue;
+                }
             }
         }
     }

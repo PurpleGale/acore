@@ -1,7 +1,11 @@
 package org.antagon.acore.listener;
 
 import org.antagon.acore.core.ConfigManager;
+import org.antagon.acore.util.MaterialValidator;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
+
 //import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
 import org.bukkit.event.EventHandler;
@@ -11,23 +15,37 @@ import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class MinecartSpeedListener implements Listener {
 
+    private final Logger logger = Logger.getLogger(MinecartSpeedListener.class.getName());
     private final boolean betterMinecartsEnabled;
-    private final Map<Material, Double> blockSpeedMultipliers;
+
+    private final ConfigurationSection blockTypes;
+    private final Map<Material, Double> validBlocks = new HashMap<>();
 
     public MinecartSpeedListener() {
         ConfigManager config = ConfigManager.getInstance();
 
         this.betterMinecartsEnabled = config.getBoolean("betterMinecarts.enabled", true);
+        this.blockTypes = config.getSection("betterMinecarts.block-types");
 
-        this.blockSpeedMultipliers = new HashMap<>();
-        for (String key : config.getStringList("block-types")) {
-            String[] parts = key.split(":");
-            Material material = Material.valueOf(parts[0]);
-            double multiplier = Double.parseDouble(parts[1]);
-            this.blockSpeedMultipliers.put(material, multiplier);
+        if (blockTypes == null) {
+            logger.warning("Warning: configuration section ‘betterMinecarts.block-types’ not found!");
+            return;
+        }
+
+        for (String key : blockTypes.getKeys(false)) {
+            try {
+                Material blockType = MaterialValidator.validateMaterial(key);
+                double blockSpeedMultiplier = blockTypes.getDouble(key);
+
+                validBlocks.put(blockType, blockSpeedMultiplier);
+            } catch (IllegalArgumentException e) {
+                logger.warning("Invalid material in configuration: " + key + ". " + e.getMessage());
+                continue;
+            }
         }
     }
 
@@ -37,11 +55,14 @@ public class MinecartSpeedListener implements Listener {
 
         //Entity passenger = minecart.getPassengers().getFirst();
 
-        Material belowBlock = minecart.getLocation().add(0, -1, 0).getBlock().getType();
-        double multiplier = blockSpeedMultipliers.getOrDefault(belowBlock, 1.0);
+        Location loc = minecart.getLocation();
+        Material belowBlock = loc.getWorld().getBlockAt(loc.getBlockX(), loc.getBlockY() - 1, loc.getBlockZ()).getType();
+        double multiplier = validBlocks.getOrDefault(belowBlock, 1.0);
 
-        Vector velocity = minecart.getVelocity();
-        Vector newVelocity = velocity.multiply(multiplier);
-        minecart.setVelocity(newVelocity);
+        if (Math.abs(multiplier - 1.0) > 0.001) {
+            Vector velocity = minecart.getVelocity();
+            Vector newVelocity = velocity.multiply(multiplier);
+            minecart.setVelocity(newVelocity);
+        }
     }
 }
