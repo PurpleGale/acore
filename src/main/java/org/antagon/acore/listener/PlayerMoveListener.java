@@ -1,17 +1,11 @@
 package org.antagon.acore.listener;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import java.util.logging.Logger;
-
 import org.antagon.acore.core.ConfigManager;
-
 import org.antagon.acore.util.MaterialValidator;
+
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -20,46 +14,49 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.logging.Logger;
+
 public class PlayerMoveListener implements Listener {
+
     private final Logger logger = Logger.getLogger(PlayerMoveListener.class.getName());
     private final boolean betterRunEnabled;
+    private final double smoothFactor;
     private final ConfigurationSection blockTypes;
     private final int checkFrequency;
-    private final double movementThreshold;
     private final Map<Material, Double> validBlocks = new HashMap<>();
     private final Map<UUID, Long> lastCheckTime = new HashMap<>();
 
     public PlayerMoveListener() {
         ConfigManager config = ConfigManager.getInstance();
 
-        this.betterRunEnabled = config.getBoolean("betterRun.enabled");
+        this.betterRunEnabled = config.getBoolean("betterRun.enabled", true);
         this.blockTypes = config.getSection("betterRun.block-types");
+        this.smoothFactor = config.getDouble("betterRun.smooth-factor", 5.0);
         this.checkFrequency = config.getInt("betterRun.tick-frequency", 20);
-        this.movementThreshold = config.getDouble("betterRun.move-threshold", 0.01);
 
-        // this.validBlocks = MaterialValidator.validateMaterials(blockTypes.getKeys(false));
+        loadBlockTypes();
+    }
 
+    private void loadBlockTypes() {
         if (blockTypes == null) {
             logger.warning("Warning: configuration section ‘betterRun.block-types’ not found!");
             return;
         }
-
         for (String key : blockTypes.getKeys(false)) {
             try {
                 Material blockType = MaterialValidator.validateMaterial(key);
-                double speedMultiplier = blockTypes.getDouble(key);
-
-                validBlocks.put(blockType, speedMultiplier);
+                validBlocks.put(blockType, blockTypes.getDouble(key));
             } catch (IllegalArgumentException e) {
                 logger.warning("Invalid material in configuration: " + key + ". " + e.getMessage());
-                continue;
             }
         }
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
-
         if (!betterRunEnabled) return;
 
         Player player = event.getPlayer();
@@ -67,18 +64,24 @@ public class PlayerMoveListener implements Listener {
 
         long currentTime = System.currentTimeMillis();
         long lastCheck = lastCheckTime.getOrDefault(playerId, 0L);
-
         if (currentTime - lastCheck < checkFrequency) return;
 
-        if (event.getFrom().distanceSquared(event.getTo()) < movementThreshold) return;
+        if (event.getFrom().distanceSquared(event.getTo()) < 0.01) return;
+
+        lastCheckTime.put(playerId, currentTime);
 
         Block blockUnder = player.getLocation().getBlock().getRelative(0, -1, 0);
         Material blockUnderType = blockUnder.getType();
+        if (!validBlocks.containsKey(blockUnderType)) return;
 
-        if (validBlocks.containsKey(blockUnderType)) {
-            AttributeInstance speedAttribute = player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
+        AttributeInstance speedAttribute = player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
+        if (speedAttribute == null) return;
 
-            speedAttribute.setBaseValue(validBlocks.get(blockUnderType) + 0.2);
-        }
+        double currentSpeed = speedAttribute.getBaseValue();
+        double targetSpeed = validBlocks.get(blockUnderType) + currentSpeed;
+        if (Math.abs(targetSpeed - currentSpeed) < 0.001) return;
+
+        double newSpeed = currentSpeed + (targetSpeed - currentSpeed) * (1.0 - smoothFactor / 10.0);
+        speedAttribute.setBaseValue(newSpeed);
     }
 }
