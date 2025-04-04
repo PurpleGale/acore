@@ -70,7 +70,7 @@ public class PlayerMoveListener implements Listener {
 
         lastCheckTime.put(playerId, currentTime);
 
-        Block blockUnder = player.getLocation().getBlock().getRelative(0, -1, 0);
+        Block blockUnder = player.getLocation().subtract(0, 0.1, 0).getBlock();
         Material blockUnderType = blockUnder.getType();
         if (!validBlocks.containsKey(blockUnderType)) return;
 

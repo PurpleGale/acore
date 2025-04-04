@@ -113,7 +113,13 @@ public class MinecartSpeedListener implements Listener {
 
         if (velocity.distanceSquared(targetVelocity) < 0.000001) return;
 
-        Vector newVelocity = velocity.clone().add(targetVelocity.clone().subtract(velocity).multiply(1.0 - smoothFactor / 10.0));
+        // Линейная интерполяция между текущей и целевой скоростью
+        // newVelocity = velocity + (targetVelocity - velocity) * interpolationFactor
+        double interpolationFactor = 1.0 - smoothFactor / 100.0;
+        Vector newVelocity = velocity.clone()
+                            .multiply(1 - interpolationFactor)
+                            .add(targetVelocity.clone().multiply(interpolationFactor));
+        
         minecart.setVelocity(newVelocity);
     }
 }
