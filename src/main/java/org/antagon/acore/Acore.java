@@ -1,22 +1,43 @@
 package org.antagon.acore;
 
-import ce.ajneb97.api.ConditionalEventsAPI;
-
-import org.antagon.acore.integration.ConditionalEvent.action.DropMythicItem;
-import org.antagon.acore.integration.ConditionalEvent.action.SpawnMythicMob;
+import org.antagon.acore.core.ConfigManager;
+import org.antagon.acore.listener.VillagerTransportListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Acore extends JavaPlugin {
 
+    private ConfigManager configManager;
+
     @Override
     public void onEnable() {
-        // Plugin startup logic
-        ConditionalEventsAPI.registerApiActions(this,new SpawnMythicMob(), new DropMythicItem());
+        // Initialize config
+        this.configManager = ConfigManager.initialize(getDataFolder(), getLogger());
+        
+        // Register listeners
+        registerListeners();
+        
+        getLogger().info("Acore plugin has been enabled successfully!");
+        
+        // !!! С этим полем плагин не заводится, хз почему, поэтому пока так !!!
+        // потом почекаю
+        //ConditionalEventsAPI.registerApiActions(this,new SpawnMythicMob(), new DropMythicItem());
+    }
+
+    private void registerListeners() {
+        // Register VillagerTransportListener if enabled in config
+        if (configManager.getBoolean("villagerTransport.enabled", true)) {
+            getServer().getPluginManager().registerEvents(
+                new VillagerTransportListener(this, configManager), this);
+            getLogger().info("Villager Transportation feature enabled");
+        }
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        ConditionalEventsAPI.unregisterApiActions(this);
+        getLogger().info("Acore plugin has been disabled");
+
+        // !!! Жиза !!!
+        //ConditionalEventsAPI.unregisterApiActions(this);
     }
 }

@@ -7,3 +7,5 @@ prefix: acore
 api-version: '1.21'
 website: https://reborn.antagon.su
 load: STARTUP
+
+softdepend: [ConditionalEvents, MythicMobs]

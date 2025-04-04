@@ -13,6 +13,15 @@ public class ConfigFileCreator {
 
     public ConfigFileCreator(File dataFolder, Logger logger) {
         this.logger = logger;
+        
+        if (!dataFolder.exists()) {
+            if (dataFolder.mkdirs()) {
+                logger.info("Created plugin data folder.");
+            } else {
+                logger.severe("Failed to create plugin data folder!");
+            }
+        }
+        
         this.configFile = new File(dataFolder, "config.yml");
         createConfigIfAbsent();
     }
@@ -39,6 +48,9 @@ public class ConfigFileCreator {
             try {
                 if (configFile.createNewFile()) {
                     logger.info("Created a new configuration file.");
+                    
+                    FileConfiguration defaultConfig = getDefaultConfig();
+                    saveConfig(defaultConfig, configFile);
                 }
             } catch (IOException e) {
                 logger.log(Level.SEVERE, "Failed to create config file: " + e.getMessage(), e);
