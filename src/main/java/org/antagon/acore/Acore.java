@@ -1,6 +1,7 @@
 package org.antagon.acore;
 
 import org.antagon.acore.core.ConfigManager;
+import org.antagon.acore.listener.ItemFrameListener;
 import org.antagon.acore.listener.VillagerTransportListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,6 +31,8 @@ public final class Acore extends JavaPlugin {
                 new VillagerTransportListener(this, configManager), this);
             getLogger().info("Villager Transportation feature enabled");
         }
+
+        getServer().getPluginManager().registerEvents(new ItemFrameListener(configManager), this);
     }
 
     @Override
