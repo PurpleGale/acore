@@ -18,6 +18,13 @@ villagerTransport:
   llama:
     enabled: true
 
+# make item frame invisible using shears
+invisibleItemFrames:
+  enabled: true
+  # Whether to make the item frame visible again when right-clicked with shears while invisible
+  toggleable: true
+
+
 # new minecart mechanic which makes minecarts deal damage while interact with other entities on high speed
 minecartDamage:
   enabled: true
