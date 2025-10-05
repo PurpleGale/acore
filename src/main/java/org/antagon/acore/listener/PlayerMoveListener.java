@@ -1,8 +1,12 @@
 package org.antagon.acore.listener;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.logging.Logger;
+
 import org.antagon.acore.core.ConfigManager;
 import org.antagon.acore.util.MaterialValidator;
-
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -13,11 +17,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import java.util.logging.Logger;
 
 public class PlayerMoveListener implements Listener {
 
@@ -74,7 +73,7 @@ public class PlayerMoveListener implements Listener {
         Material blockUnderType = blockUnder.getType();
         if (!validBlocks.containsKey(blockUnderType)) return;
 
-        AttributeInstance speedAttribute = player.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
+        AttributeInstance speedAttribute = player.getAttribute(Attribute.MOVEMENT_SPEED);
         if (speedAttribute == null) return;
 
         double currentSpeed = speedAttribute.getBaseValue();
