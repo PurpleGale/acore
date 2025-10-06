@@ -2,6 +2,7 @@ package org.antagon.acore;
 
 import org.antagon.acore.core.ConfigManager;
 import org.antagon.acore.listener.ItemFrameListener;
+import org.antagon.acore.listener.MinecartSpeedListener;
 import org.antagon.acore.listener.VillagerTransportListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,6 +31,12 @@ public final class Acore extends JavaPlugin {
             getServer().getPluginManager().registerEvents(
                 new VillagerTransportListener(this, configManager), this);
             getLogger().info("Villager Transportation feature enabled");
+        }
+
+        // Register MinecartSpeedListener if enabled in config
+        if (configManager.getBoolean("minecartSpeed.enabled", true)) {
+            getServer().getPluginManager().registerEvents(new MinecartSpeedListener(), this);
+            getLogger().info("Minecart Speed feature enabled");
         }
 
         getServer().getPluginManager().registerEvents(new ItemFrameListener(configManager), this);
