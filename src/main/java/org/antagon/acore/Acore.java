@@ -1,6 +1,8 @@
 package org.antagon.acore;
 
 import org.antagon.acore.core.ConfigManager;
+import org.antagon.acore.listener.BlockInteractionListener;
+import org.antagon.acore.listener.FogPotionListener;
 import org.antagon.acore.listener.ItemFrameListener;
 import org.antagon.acore.listener.MinecartSpeedListener;
 import org.antagon.acore.listener.VillagerTransportListener;
@@ -40,6 +42,16 @@ public final class Acore extends JavaPlugin {
         }
 
         getServer().getPluginManager().registerEvents(new ItemFrameListener(configManager), this);
+
+        // Register BlockInteractionListener for tracking player block interactions
+        getServer().getPluginManager().registerEvents(new BlockInteractionListener(), this);
+        getLogger().info("Block Interaction Tracker enabled");
+
+        // Register FogPotionListener if enabled in config
+        if (configManager.getBoolean("fogPotion.enabled", true)) {
+            getServer().getPluginManager().registerEvents(new FogPotionListener(this, configManager), this);
+            getLogger().info("Fog Potion feature enabled");
+        }
     }
 
     @Override
