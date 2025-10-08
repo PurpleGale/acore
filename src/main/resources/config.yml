@@ -165,6 +165,10 @@ fireAdjustment:
       max-amount: 3
       chance: 0.1
 
+# Banner head feature - allows players to wear banners on their head through inventory
+bannerHead:
+  enabled: true
+
 # Custom fog potion that shows last 3 players who interacted with blocks in radius
 fogPotion:
   enabled: true

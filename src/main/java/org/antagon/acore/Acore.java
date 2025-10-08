@@ -1,6 +1,7 @@
 package org.antagon.acore;
 
 import org.antagon.acore.core.ConfigManager;
+import org.antagon.acore.listener.BannerHeadListener;
 import org.antagon.acore.listener.BlockInteractionListener;
 import org.antagon.acore.listener.FogPotionListener;
 import org.antagon.acore.listener.ItemFrameListener;
@@ -51,6 +52,12 @@ public final class Acore extends JavaPlugin {
         if (configManager.getBoolean("fogPotion.enabled", true)) {
             getServer().getPluginManager().registerEvents(new FogPotionListener(this, configManager), this);
             getLogger().info("Fog Potion feature enabled");
+        }
+
+        // Register BannerHeadListener if enabled in config
+        if (configManager.getBoolean("bannerHead.enabled", true)) {
+            getServer().getPluginManager().registerEvents(new BannerHeadListener(configManager), this);
+            getLogger().info("Banner Head feature enabled");
         }
     }
 
