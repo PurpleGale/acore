@@ -8,9 +8,19 @@ api-version: '1.21'
 website: https://reborn.antagon.su
 load: STARTUP
 
+depend: [LuckPerms]
 softdepend: [ConditionalEvents, MythicMobs]
 
+commands:
+  showinfo:
+    description: Toggleable bossbar
+    usage: /showinfo
+    permission: acore.showinfo
+
 permissions:
+  acore.showinfo:
+    description: Permission for showinfo command
+    default: true
   permission.admin:
-    description: "Permission for admin commands"
+    description: Permission for admin commands
     default: op
