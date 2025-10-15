@@ -16,11 +16,21 @@ commands:
     description: Toggleable bossbar
     usage: /showinfo
     permission: acore.showinfo
+  schvapchichi:
+    description: Enabled schvapchichi
+    usage: /schvapchichi
+    permission: acore.schvapchichi
 
 permissions:
   acore.showinfo:
     description: Permission for showinfo command
     default: true
+  acore.schvapchichi:
+    description: Permission for schvapchichi command
+    default: true
   permission.admin:
     description: Permission for admin commands
     default: op
+    children:
+      - acore.showinfo
+      - acore.schvapchichi

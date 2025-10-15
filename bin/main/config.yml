@@ -180,3 +180,15 @@ fogPotion:
   display-duration: 10
   # Cooldown in seconds between uses of the same potion in the same location
   cooldown: 30
+
+# Швапчичи feature - cursed players will lose random items on rejoin
+schvapchichi:
+  enabled: true
+  # Curse settings - steal random item from inventory on rejoin
+  curse:
+    stealChance: 0.05  # 5% chance to steal an item
+    message: "&8Швапчичи забирает это..."
+  # Bee breeding settings - chance to drop special item when breeding bees
+  bee:
+    dropChance: 0.001  # 0.1% chance to get special item
+    customModelData: 1205  # Custom model data for the potion item

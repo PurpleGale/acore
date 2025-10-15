@@ -2,6 +2,7 @@ package org.antagon.acore;
 
 import java.lang.reflect.Constructor;
 
+import org.antagon.acore.commands.SchvapchichiCommand;
 import org.antagon.acore.commands.ShowInfoCommand;
 import org.antagon.acore.core.ConfigManager;
 import org.antagon.acore.listener.BannerHeadListener;
@@ -9,7 +10,10 @@ import org.antagon.acore.listener.BlockInteractionListener;
 import org.antagon.acore.listener.FogPotionListener;
 import org.antagon.acore.listener.ItemFrameListener;
 import org.antagon.acore.listener.MinecartSpeedListener;
+import org.antagon.acore.listener.PlayerMoveListener;
+import org.antagon.acore.listener.SchvapchichiListener;
 import org.antagon.acore.listener.VillagerTransportListener;
+import org.antagon.acore.util.CurseManager;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,11 +21,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class Acore extends JavaPlugin {
 
     private ConfigManager configManager;
+    private CurseManager curseManager;
 
     @Override
     public void onEnable() {
         // Initialize config
         this.configManager = ConfigManager.initialize(getDataFolder(), getLogger());
+
+        // Initialize curse manager
+        this.curseManager = new CurseManager(this);
 
         // Register commands
         registerCommands();
@@ -67,6 +75,16 @@ public final class Acore extends JavaPlugin {
             getServer().getPluginManager().registerEvents(new BannerHeadListener(configManager), this);
             getLogger().info("Banner Head feature enabled");
         }
+
+        // Register SchvapchichiListener if enabled in config
+        if (configManager.getBoolean("schvapchichi.enabled", true)) {
+            getServer().getPluginManager().registerEvents(new SchvapchichiListener(this, curseManager), this);
+            getLogger().info("Schvapchichi feature enabled");
+            getLogger().info("Cursed players loaded: " + curseManager.getCursedPlayers().size());
+        }
+
+        // Register PlayerMoveListener
+        getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
     }
 
     private void registerCommands() {
@@ -90,6 +108,28 @@ public final class Acore extends JavaPlugin {
             getLogger().info("ShowInfo command registered");
         } catch (Exception e) {
             getLogger().warning("Failed to register showinfo command: " + e.getMessage());
+        }
+
+        // Register schvapchichi command
+        try {
+            var commandMap = getServer().getCommandMap();
+            var command = commandMap.getCommand("schvapchichi");
+            if (command == null) {
+                // Create command if it doesn't exist using reflection
+                Constructor<PluginCommand> constructor =
+                    PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
+                constructor.setAccessible(true);
+                command = constructor.newInstance("schvapchichi", this);
+                command.setDescription("Проклясть игрока Швапчичи");
+                command.setUsage("/schvapchichi");
+                ((PluginCommand) command).setExecutor(new SchvapchichiCommand(this, curseManager));
+                commandMap.register("acore", command);
+            } else {
+                ((PluginCommand) command).setExecutor(new SchvapchichiCommand(this, curseManager));
+            }
+            getLogger().info("Schvapchichi command registered");
+        } catch (Exception e) {
+            getLogger().warning("Failed to register schvapchichi command: " + e.getMessage());
         }
     }
 
