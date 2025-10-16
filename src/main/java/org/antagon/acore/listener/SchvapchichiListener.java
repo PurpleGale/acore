@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import org.antagon.acore.util.CurseManager;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Player;
@@ -17,6 +18,7 @@ import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SchvapchichiListener implements Listener {
@@ -142,7 +144,14 @@ public class SchvapchichiListener implements Listener {
         if (meta != null) {
             int customModelData = plugin.getConfig().getInt("schvapchichi.bee.customModelData", 1205);
             meta.setCustomModelData(customModelData);
-            meta.setDisplayName("&fШвапчичи");
+            meta.setDisplayName("§fШвапчичи");
+
+            // Set potion color to white (255, 255, 255)
+            if (meta instanceof PotionMeta) {
+                PotionMeta potionMeta = (PotionMeta) meta;
+                potionMeta.setColor(Color.fromRGB(255, 255, 255));
+            }
+
             potion.setItemMeta(meta);
         }
 
