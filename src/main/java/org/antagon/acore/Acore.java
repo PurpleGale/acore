@@ -2,6 +2,7 @@ package org.antagon.acore;
 
 import java.lang.reflect.Constructor;
 
+import org.antagon.acore.commands.AntiSchvapchichiCommand;
 import org.antagon.acore.commands.SchvapchichiCommand;
 import org.antagon.acore.commands.ShowInfoCommand;
 import org.antagon.acore.core.ConfigManager;
@@ -130,6 +131,28 @@ public final class Acore extends JavaPlugin {
             getLogger().info("Schvapchichi command registered");
         } catch (Exception e) {
             getLogger().warning("Failed to register schvapchichi command: " + e.getMessage());
+        }
+
+        // Register anti_schvapchichi command
+        try {
+            var commandMap = getServer().getCommandMap();
+            var command = commandMap.getCommand("anti_schvapchichi");
+            if (command == null) {
+                // Create command if it doesn't exist using reflection
+                Constructor<PluginCommand> constructor =
+                    PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
+                constructor.setAccessible(true);
+                command = constructor.newInstance("anti_schvapchichi", this);
+                command.setDescription("Избавиться от проклятья Швапчичи");
+                command.setUsage("/anti_schvapchichi");
+                ((PluginCommand) command).setExecutor(new AntiSchvapchichiCommand(this, curseManager));
+                commandMap.register("acore", command);
+            } else {
+                ((PluginCommand) command).setExecutor(new AntiSchvapchichiCommand(this, curseManager));
+            }
+            getLogger().info("AntiSchvapchichi command registered");
+        } catch (Exception e) {
+            getLogger().warning("Failed to register anti_schvapchichi command: " + e.getMessage());
         }
     }
 

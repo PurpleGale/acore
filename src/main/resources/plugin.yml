@@ -20,6 +20,10 @@ commands:
     description: Enabled schvapchichi
     usage: /schvapchichi
     permission: acore.schvapchichi
+  anti_schvapchichi:
+    description: Disable schvapchichi
+    usage: /anti_schvapchichi
+    permission: acore.a_schvapchichi
 
 permissions:
   acore.showinfo:
@@ -28,9 +32,13 @@ permissions:
   acore.schvapchichi:
     description: Permission for schvapchichi command
     default: true
+  acore.a_schvapchichi:
+    description: Permission for schvapchichi command
+    default: op
   permission.admin:
     description: Permission for admin commands
     default: op
     children:
       - acore.showinfo
       - acore.schvapchichi
+      - acore.a_schvapchichi
