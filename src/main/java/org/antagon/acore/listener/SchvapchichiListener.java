@@ -8,17 +8,12 @@ import java.util.Random;
 import java.util.UUID;
 
 import org.antagon.acore.util.CurseManager;
-import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.entity.Bee;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class SchvapchichiListener implements Listener {
@@ -53,31 +48,6 @@ public class SchvapchichiListener implements Listener {
             } else {
                 plugin.getLogger().info("No item stolen from " + player.getName() + " this time");
             }
-        }
-    }
-
-    /**
-     * Handle bee breeding event - chance to drop special item
-     */
-    @EventHandler
-    public void onEntityBreed(EntityBreedEvent event) {
-        if (!(event.getEntity() instanceof Bee) || !(event.getMother() instanceof Bee)) {
-            return;
-        }
-
-        // Check if feature is enabled
-        if (!plugin.getConfig().getBoolean("schvapchichi.enabled", true)) {
-            return;
-        }
-
-        double dropChance = plugin.getConfig().getDouble("schvapchichi.bee.dropChance", 0.001);
-
-        if (random.nextDouble() < dropChance) {
-            // Create special potion item
-            ItemStack specialPotion = createSpecialPotion();
-
-            // Drop the item at the breeding location
-            event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), specialPotion);
         }
     }
 
@@ -134,27 +104,4 @@ public class SchvapchichiListener implements Listener {
         return shouldSteal;
     }
 
-    /**
-     * Create the special potion item with custom model data
-     */
-    private ItemStack createSpecialPotion() {
-        ItemStack potion = new ItemStack(Material.POTION);
-        ItemMeta meta = potion.getItemMeta();
-
-        if (meta != null) {
-            int customModelData = plugin.getConfig().getInt("schvapchichi.bee.customModelData", 1205);
-            meta.setCustomModelData(customModelData);
-            meta.setDisplayName("§fШвапчичи");
-
-            // Set potion color to white (255, 255, 255)
-            if (meta instanceof PotionMeta) {
-                PotionMeta potionMeta = (PotionMeta) meta;
-                potionMeta.setColor(Color.fromRGB(255, 255, 255));
-            }
-
-            potion.setItemMeta(meta);
-        }
-
-        return potion;
-    }
 }

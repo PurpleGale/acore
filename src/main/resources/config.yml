@@ -188,7 +188,3 @@ schvapchichi:
   curse:
     stealChance: 0.05  # 5% chance to steal an item
     message: "&8Швапчичи забирает это..."
-  # Bee breeding settings - chance to drop special item when breeding bees
-  bee:
-    dropChance: 0.001  # 0.1% chance to get special item
-    customModelData: 1205  # Custom model data for the potion item
