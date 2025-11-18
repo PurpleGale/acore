@@ -164,3 +164,27 @@ fireAdjustment:
       min-amount: 1
       max-amount: 3
       chance: 0.1
+
+# Banner head feature - allows players to wear banners on their head through inventory
+bannerHead:
+  enabled: true
+
+# Custom fog potion that shows last 3 players who interacted with blocks in radius
+fogPotion:
+  enabled: true
+  # Custom Model Data value that identifies the fog potion (set this in your resource pack/item configuration)
+  custom-model-data: 1201
+  # Radius in blocks to track player interactions
+  radius: 10
+  # Duration in seconds for how long to show the action bar message
+  display-duration: 10
+  # Cooldown in seconds between uses of the same potion in the same location
+  cooldown: 30
+
+# Швапчичи feature - cursed players will lose random items on rejoin
+schvapchichi:
+  enabled: true
+  # Curse settings - steal random item from inventory on rejoin
+  curse:
+    stealChance: 0.05  # 5% chance to steal an item
+    message: "&8Швапчичи забирает это..."
