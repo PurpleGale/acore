@@ -188,3 +188,11 @@ schvapchichi:
   curse:
     stealChance: 0.05  # 5% chance to steal an item
     message: "&8Швапчичи забирает это..."
+
+# First join item feature - gives MythicMobs item to players on first join
+firstJoinItem:
+  enabled: true
+  # MythicMobs item internal name
+  mythicItemName: menu_book
+  # Custom model data for the item
+  customModelData: 1039

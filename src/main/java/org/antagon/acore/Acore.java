@@ -11,6 +11,7 @@ import org.antagon.acore.listener.BlockInteractionListener;
 import org.antagon.acore.listener.FogPotionListener;
 import org.antagon.acore.listener.ItemFrameListener;
 import org.antagon.acore.listener.MinecartSpeedListener;
+import org.antagon.acore.listener.PlayerJoinListener;
 import org.antagon.acore.listener.PlayerMoveListener;
 import org.antagon.acore.listener.SchvapchichiListener;
 import org.antagon.acore.listener.VillagerTransportListener;
@@ -86,6 +87,12 @@ public final class Acore extends JavaPlugin {
 
         // Register PlayerMoveListener
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
+
+        // Register PlayerJoinListener if enabled in config
+        if (configManager.getBoolean("firstJoinItem.enabled", true)) {
+            getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
+            getLogger().info("First Join Item feature enabled");
+        }
     }
 
     private void registerCommands() {
