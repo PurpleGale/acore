@@ -13,6 +13,8 @@ import java.util.logging.Logger;
 
 import org.antagon.acore.core.ConfigManager;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
+import org.bukkit.advancement.Advancement;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -52,9 +54,15 @@ public class PlayerJoinListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+
+        // Award new year root achievement if not already granted
+        if (!playerHasAchievement(player, "acore:new_year/root")) {
+            awardAchievement(player, "acore:new_year/root");
+        }
+
         if (!firstJoinItemEnabled) return;
 
-        Player player = event.getPlayer();
         UUID playerUUID = player.getUniqueId();
 
         // Check if player already received the item
@@ -152,6 +160,40 @@ public class PlayerJoinListener implements Listener {
                             StandardOpenOption.APPEND);
         } catch (IOException e) {
             logger.severe("Failed to write to first join players file: " + e.getMessage());
+        }
+    }
+
+    private boolean playerHasAchievement(Player player, String advancementKey) {
+        try {
+            NamespacedKey key = NamespacedKey.fromString(advancementKey);
+            if (key == null) {
+                return false;
+            }
+
+            Advancement advancement = player.getServer().getAdvancement(key);
+            if (advancement == null) {
+                return false;
+            }
+
+            return player.getAdvancementProgress(advancement).isDone();
+        } catch (Exception e) {
+            logger.warning("Error checking achievement " + advancementKey + ": " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Award achievement to player
+     */
+    private void awardAchievement(Player player, String advancementKey) {
+        try {
+            // Use console command to grant advancement
+            Bukkit.dispatchCommand(
+                Bukkit.getConsoleSender(),
+                "advancement grant " + player.getName() + " only " + advancementKey
+            );
+        } catch (Exception e) {
+            logger.warning("Error awarding achievement " + advancementKey + ": " + e.getMessage());
         }
     }
 }
