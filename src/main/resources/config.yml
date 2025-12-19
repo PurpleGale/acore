@@ -196,3 +196,7 @@ firstJoinItem:
   mythicItemName: menu_book
   # Custom model data for the item
   customModelData: 1039
+
+# Referrals feature - allows players to invite others and get rewards
+referrals:
+  enabled: true
