@@ -17,7 +17,7 @@ public class ReferralManager {
     private final File referralFile;
     private final Map<UUID, UUID> referrals; // реферал -> пригласивший
     private final Map<UUID, List<UUID>> inviterReferrals; // пригласивший -> список рефералов
-    private final Map<UUID, Long> referralStartTime; // реферал -> время начала (в миллисекундах)
+    private final Map<UUID, Long> referralStartTime; // реферал -> время начала трекинга (в миллисекундах)
     private final Map<UUID, Boolean> referralRewarded; // реферал -> получил ли награду за 7 часов
     private YamlConfiguration referralConfig;
 
@@ -247,4 +247,6 @@ public class ReferralManager {
         }
         return active;
     }
+
+
 }
