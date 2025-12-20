@@ -7,6 +7,7 @@ import org.antagon.acore.commands.LinkCommand;
 import org.antagon.acore.commands.SchvapchichiCommand;
 import org.antagon.acore.commands.ShowInfoCommand;
 import org.antagon.acore.core.ConfigManager;
+import org.antagon.acore.listener.AdvancementListener;
 import org.antagon.acore.listener.BannerHeadListener;
 import org.antagon.acore.listener.BlockInteractionListener;
 import org.antagon.acore.listener.FogPotionListener;
@@ -106,6 +107,10 @@ public final class Acore extends JavaPlugin {
             getServer().getPluginManager().registerEvents(new ReferralListener(this, referralManager), this);
             getLogger().info("Referral feature enabled");
         }
+
+        // Register AdvancementListener
+        getServer().getPluginManager().registerEvents(new AdvancementListener(), this);
+        getLogger().info("Advancement listener enabled");
     }
 
     private void registerCommands() {
