@@ -34,8 +34,6 @@ public class ReferralListener implements Listener {
     }
 
     private void checkReferralTimes() {
-        plugin.getLogger().info("Checking referral times...");
-
         long currentTime = System.currentTimeMillis();
         long sevenHoursMs = 7 * 60 * 60 * 1000L;
 
@@ -43,51 +41,30 @@ public class ReferralListener implements Listener {
         for (Player player : Bukkit.getOnlinePlayers()) {
             UUID playerId = player.getUniqueId();
 
-            plugin.getLogger().info("Checking player " + player.getName() + " (UUID: " + playerId + ")");
+            if (referralManager.isReferral(playerId) && !referralManager.isReferralRewarded(playerId)) {
+                Long startTime = referralManager.getReferralStartTime(playerId);
+                if (startTime != null) {
+                    long playedTime = currentTime - startTime;
 
-            if (referralManager.isReferral(playerId)) {
-                plugin.getLogger().info("Player " + player.getName() + " is a referral");
-
-                if (!referralManager.isReferralRewarded(playerId)) {
-                    plugin.getLogger().info("Player " + player.getName() + " is not rewarded yet");
-
-                    Long startTime = referralManager.getReferralStartTime(playerId);
-                    if (startTime != null) {
-                        long playedTime = currentTime - startTime;
-                        long playedHours = playedTime / (60 * 60 * 1000L);
-
-                        plugin.getLogger().info("Player " + player.getName() + " has played for " + playedHours + " hours");
-
-                        if (playedTime >= sevenHoursMs) {
-                            plugin.getLogger().info("Player " + player.getName() + " has completed 7 hours!");
-
-                            // Give reward to inviter
-                            UUID inviterId = referralManager.getInviter(playerId);
-                            if (inviterId != null) {
-                                Player inviter = Bukkit.getPlayer(inviterId);
-                                if (inviter != null) {
-                                    giveReward(inviter, 9);
-                                    inviter.sendMessage("§aВаш реферал " + player.getName() + " отыграл 7 часов! Вы получили награду.");
-                                }
+                    if (playedTime >= sevenHoursMs) {
+                        // Give reward to inviter
+                        UUID inviterId = referralManager.getInviter(playerId);
+                        if (inviterId != null) {
+                            Player inviter = Bukkit.getPlayer(inviterId);
+                            if (inviter != null) {
+                                giveReward(inviter, 9);
+                                inviter.sendMessage("§aВаш реферал " + player.getName() + " отыграл 7 часов! Вы получили награду.");
                             }
-
-                            // Mark as rewarded
-                            referralManager.markReferralRewarded(playerId);
-                            player.sendMessage("§aВы отыграли 7 часов как реферал! Ваш пригласивший получил награду.");
-                            plugin.getLogger().info("Referral " + player.getName() + " completed 7 hours playtime");
                         }
-                    } else {
-                        plugin.getLogger().info("Player " + player.getName() + " has no start time");
+
+                        // Mark as rewarded
+                        referralManager.markReferralRewarded(playerId);
+                        player.sendMessage("§aВы отыграли 7 часов как реферал! Ваш пригласивший получил награду.");
+                        plugin.getLogger().info("Referral " + player.getName() + " completed 7 hours playtime");
                     }
-                } else {
-                    plugin.getLogger().info("Player " + player.getName() + " is already rewarded");
                 }
-            } else {
-                plugin.getLogger().info("Player " + player.getName() + " is not a referral");
             }
         }
-
-        plugin.getLogger().info("Referral time check completed");
     }
 
     private void handleAccept(Player referral, String inviterName, String referralName) {

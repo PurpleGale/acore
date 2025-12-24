@@ -208,9 +208,12 @@ public class ReferralManager {
      * Start tracking time for referral
      */
     public void startReferralTracking(UUID referralId) {
-        referralStartTime.put(referralId, System.currentTimeMillis());
+        long now = System.currentTimeMillis();
+        referralStartTime.put(referralId, now);
         referralRewarded.put(referralId, false);
         saveReferrals();
+
+        plugin.getLogger().info("Started tracking time for referral " + referralId + " at " + now);
     }
 
     /**
