@@ -10,6 +10,7 @@ import org.antagon.acore.core.ConfigManager;
 import org.antagon.acore.listener.AdvancementListener;
 import org.antagon.acore.listener.BannerHeadListener;
 import org.antagon.acore.listener.BlockInteractionListener;
+import org.antagon.acore.listener.EntityDeathListener;
 import org.antagon.acore.listener.FogPotionListener;
 import org.antagon.acore.listener.ItemFrameListener;
 import org.antagon.acore.listener.MinecartSpeedListener;
@@ -111,6 +112,10 @@ public final class Acore extends JavaPlugin {
         // Register AdvancementListener
         getServer().getPluginManager().registerEvents(new AdvancementListener(), this);
         getLogger().info("Advancement listener enabled");
+
+        // Register EntityDeathListener
+        getServer().getPluginManager().registerEvents(new EntityDeathListener(), this);
+        getLogger().info("Entity death listener enabled");
     }
 
     private void registerCommands() {
