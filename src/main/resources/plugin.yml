@@ -2,7 +2,7 @@ name: acore
 authors: [ aqua, bloodysupport, nonxedy ]
 main: org.antagon.acore.Acore
 description: Multi-purpose plugin for Antagon:Reborn server
-version: '0.0.2'
+version: '0.0.3'
 prefix: acore
 api-version: '1.21'
 website: https://reborn.antagon.su
@@ -24,6 +24,10 @@ commands:
     description: Disable schvapchichi
     usage: /anti_schvapchichi
     permission: acore.a_schvapchichi
+  link:
+    description: Invite a player to become your referral
+    usage: /link <player>
+    permission: acore.link
 
 permissions:
   acore.showinfo:
@@ -35,6 +39,9 @@ permissions:
   acore.a_schvapchichi:
     description: Permission for schvapchichi command
     default: op
+  acore.link:
+    description: Permission for link command
+    default: true
   permission.admin:
     description: Permission for admin commands
     default: op
@@ -42,3 +49,4 @@ permissions:
       - acore.showinfo
       - acore.schvapchichi
       - acore.a_schvapchichi
+      - acore.link

@@ -10,8 +10,6 @@ import org.antagon.acore.util.MaterialValidator;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.advancement.Advancement;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -19,6 +17,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class PlayerMoveListener implements Listener {
 
@@ -78,17 +78,17 @@ public class PlayerMoveListener implements Listener {
         // Check for beehive achievement logic
         checkBeehiveAchievement(player, blockUnder);
 
-        if (!validBlocks.containsKey(blockUnderType)) return;
-
-        AttributeInstance speedAttribute = player.getAttribute(Attribute.MOVEMENT_SPEED);
-        if (speedAttribute == null) return;
-
-        double currentSpeed = speedAttribute.getBaseValue();
-        double targetSpeed = validBlocks.get(blockUnderType) + currentSpeed;
-        if (Math.abs(targetSpeed - currentSpeed) < 0.001) return;
-
-        double newSpeed = currentSpeed + (targetSpeed - currentSpeed) * (1.0 - smoothFactor / 10.0);
-        speedAttribute.setBaseValue(newSpeed);
+        if (validBlocks.containsKey(blockUnderType)) {
+            // Apply temporary speed effect
+            if (!player.hasPotionEffect(PotionEffectType.SPEED)) {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 60, 0)); // 3 seconds, Speed I
+            }
+        } else {
+            // Remove speed effect if player is not on valid block
+            if (player.hasPotionEffect(PotionEffectType.SPEED)) {
+                player.removePotionEffect(PotionEffectType.SPEED);
+            }
+        }
     }
 
     /**

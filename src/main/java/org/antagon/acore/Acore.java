@@ -3,6 +3,7 @@ package org.antagon.acore;
 import java.lang.reflect.Constructor;
 
 import org.antagon.acore.commands.AntiSchvapchichiCommand;
+import org.antagon.acore.commands.LinkCommand;
 import org.antagon.acore.commands.SchvapchichiCommand;
 import org.antagon.acore.commands.ShowInfoCommand;
 import org.antagon.acore.core.ConfigManager;
@@ -11,10 +12,13 @@ import org.antagon.acore.listener.BlockInteractionListener;
 import org.antagon.acore.listener.FogPotionListener;
 import org.antagon.acore.listener.ItemFrameListener;
 import org.antagon.acore.listener.MinecartSpeedListener;
+import org.antagon.acore.listener.PlayerJoinListener;
 import org.antagon.acore.listener.PlayerMoveListener;
+import org.antagon.acore.listener.ReferralListener;
 import org.antagon.acore.listener.SchvapchichiListener;
 import org.antagon.acore.listener.VillagerTransportListener;
 import org.antagon.acore.util.CurseManager;
+import org.antagon.acore.util.ReferralManager;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,6 +27,7 @@ public final class Acore extends JavaPlugin {
 
     private ConfigManager configManager;
     private CurseManager curseManager;
+    private ReferralManager referralManager;
 
     @Override
     public void onEnable() {
@@ -31,6 +36,9 @@ public final class Acore extends JavaPlugin {
 
         // Initialize curse manager
         this.curseManager = new CurseManager(this);
+
+        // Initialize referral manager
+        this.referralManager = new ReferralManager(this);
 
         // Register commands
         registerCommands();
@@ -86,6 +94,18 @@ public final class Acore extends JavaPlugin {
 
         // Register PlayerMoveListener
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(), this);
+
+        // Register PlayerJoinListener if enabled in config
+        if (configManager.getBoolean("firstJoinItem.enabled", true)) {
+            getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
+            getLogger().info("First Join Item feature enabled");
+        }
+
+        // Register ReferralListener if enabled in config
+        if (configManager.getBoolean("referrals.enabled", true)) {
+            getServer().getPluginManager().registerEvents(new ReferralListener(this, referralManager), this);
+            getLogger().info("Referral feature enabled");
+        }
     }
 
     private void registerCommands() {
@@ -153,6 +173,28 @@ public final class Acore extends JavaPlugin {
             getLogger().info("AntiSchvapchichi command registered");
         } catch (Exception e) {
             getLogger().warning("Failed to register anti_schvapchichi command: " + e.getMessage());
+        }
+
+        // Register link command
+        try {
+            var commandMap = getServer().getCommandMap();
+            var command = commandMap.getCommand("link");
+            if (command == null) {
+                // Create command if it doesn't exist using reflection
+                Constructor<PluginCommand> constructor =
+                    PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
+                constructor.setAccessible(true);
+                command = constructor.newInstance("link", this);
+                command.setDescription("Invite a player to become your referral");
+                command.setUsage("/link <player>");
+                ((PluginCommand) command).setExecutor(new LinkCommand(this, referralManager));
+                commandMap.register("acore", command);
+            } else {
+                ((PluginCommand) command).setExecutor(new LinkCommand(this, referralManager));
+            }
+            getLogger().info("Link command registered");
+        } catch (Exception e) {
+            getLogger().warning("Failed to register link command: " + e.getMessage());
         }
     }
 
