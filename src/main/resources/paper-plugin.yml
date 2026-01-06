@@ -2,7 +2,7 @@ name: acore
 authors: [ aqua, bloodysupport, nonxedy ]
 main: org.antagon.acore.Acore
 description: Multi-purpose plugin for Antagon:Reborn server
-version: '0.0.2'
+version: '0.0.3'
 prefix: acore
 api-version: '1.21'
 website: https://reborn.antagon.su
